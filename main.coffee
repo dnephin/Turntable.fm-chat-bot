@@ -1,7 +1,8 @@
 ###
-# Objectives:
-# - prevent idle time from going over x
-# - insta grab available spot
+ Objectives:
+ - Prevent idle time from going over x seconds
+ - Automatically grab a DJ spot
+ - Respond to idle checks
 ###
 
 # Turntable
@@ -13,22 +14,45 @@ roomman = gPRzNzkxTaCcJb
 # Logging
 log = (m) -> console.log(m)
 
+# Max idle time that users will accept
+maxIdleTime = 6 * 60 * 1000
+# Max idle response frequency
+maxIdleResponseFreq = 15 * 1000
 
 # +Artists
 goodArtists = [
-	'the pharcyde'
-	'the root'
-	'saigon'
+	'big l'
+	'biz markie'
+	'black star'
+	'epmd'
+	'eric sermon'
+	'gang starr'
+	'gorillaz'
+	'group home'
+	'hieroglyphics'
+	'j dilla'
+	'jay dee'
+	'jay-z'
+	'jaylib'
 	'kanye west'
-	'mos def'
-	'talib kweli'
 	'mf doom'
-	'people under the strairs'
+	'mos def'
+	'nas'
+	'people under the stairs'
+	'saigon'
+	'talib kweli'
+	'the pharcyde'
+	'the roots'
+	'wu tang'
+	'wu-tang'
 ]
 
 badArtists = [
+	'50 cent'
 	'curren$y'
+	'kendrick'
 	'lil wayne'
+	'suave smooth'
 ]
 
 randomPhrases = [
@@ -37,6 +61,33 @@ randomPhrases = [
 	'i dunno about this track'
 	'.'
 	'word'
+	'lol'
+	'...'
+	'^^'
+	'why'
+]
+
+nameAliases = [
+	'dne'
+	'dnep'
+	'dnephin'
+	'djs'
+]
+
+idleAliases = [
+	'afk'
+	'checkin'
+	'there'
+	'idle'
+]
+
+idleResponses = [
+	"I'm here."
+	"here"
+	"what?"
+	"..."
+	"say again?"
+	"1.2.3."
 ]
 
 window.updateIdle = ->
@@ -49,69 +100,83 @@ randomChoice = (options) ->
 	idx = Math.floor(Math.random() * (options.length))
 	options[idx]
 
+stringInText = (strings, text) ->
+	for string in strings
+		string = string.toLowerCase()
+		if text.indexOf(string) > -1
+			return true
+	return false
+
 window.say = (msg) ->
 	updateIdle()
+	lastVisibleAction = util.now()
 	chatForm = $(room.nodes.chatForm)
 	chatForm.find('input').val(msg)
 	chatForm.submit()
 
 window.voteYes = ->
 	updateIdle()
+	lastVisibleAction = util.now()
 	roomman.callback('upvote')
+	log "Votes yes."
 
 window.voteNo = ->
 	updateIdle()
-	rooman.callback('downvote')
+	lastVisibleAction = util.now()
+	roomman.callback('downvote')
+	log "Voted no."
 
-window.RESPONSE_TIMEOUT = null
+window.responseTimeout = null
+window.lastVisibleAction = util.now()
 songChange = (e) ->
 	return if e.command != "newsong"
 	# clear old callbacks
-	clearTimeout(RESPONSE_TIMEOUT) if RESPONSE_TIMEOUT
+	clearTimeout(window.responseTimeout) if window.responseTimeout
 	
 	song = e.room.metadata.current_song.metadata
 
 	# Song is mine
 	if e.room.metadata.current_dj == tt.user.id
-		log "I'm playing #{song.song} #{song.artist}"
+		log "I'm playing #{song.song} - #{song.artist}"
 		return
 
+	log "Song: #{song.song} - #{song.artist}"
 	# Good
-	for artist in goodArtists
-		artist = artist.toUpperCase()
-		if song.artist.indexOf(artist) > -1
-			log "Going to upvote."
-			RESPONSE_TIMEOUT = setTimeout("voteYes()", randomDelay())
-			return
+	if stringInText(goodArtists, song.artist)
+		log "Going to upvote."
+		responseTimeout = setTimeout("voteYes()", randomDelay())
+		return
 	# Bad
-	for artist in badArtists
-		artist = artist.toUpperCase()
-		if song.artist.indexOf(artist) > -1
-			log "Going to downvote."
-			RESPONSE_TIMEOUT = setTimeout("voteNo()", randomDelay())
-			return
+	if stringInText(badArtists, song.artist)
+		log "Going to downvote."
+		responseTimeout = setTimeout("voteNo()", randomDelay())
+		return
 
 	# Unknown
 	action = randomChoice(['none', 'say', 'voteYes()', 'voteNo()'])
 	if action == 'none'
-		log 'Unknown artist, decided to do nothing.'
-		return
+		if util.now() - lastVisibleAction > maxIdleTime
+			action = randomChoice(['say', 'voteYes()', 'voteNo()'])
+		else
+			log 'Unknown artist, decided to do nothing.'
+			return
 	if action == 'say'
 		log 'Saying a random phrase.'
 		phrase = randomChoice(randomPhrases)
-		RESPONSE_TIMEOUT = setTimeout("say(#{phrase})", randomDelay())
+		responseTimeout = setTimeout("say('#{phrase}')", randomDelay())
 		return
-	if action == 'vote'
-		log 'Voting randomly'
-		RESPONSE_TIMEOUT = setTimeout(action, randomDelay())
+
+	log 'Voting randomly'
+	responseTimeout = setTimeout(action, randomDelay())
 
 
+# TODO: this is not working
 djLeft = (e) ->
 	return if e.command != "rem_dj"
 	if tt.user.id == e.user.userid
 		log "I just stepped off or got booted."
 		return
-	if tt.User.id in djIds
+	if room.isDj()
 		log "I'm already on the decks."
 		return
 
@@ -120,9 +185,20 @@ djLeft = (e) ->
 	log "Grabbing the spot!"
 
 
-# TODO: watch messages for someone complaining
+window.lastIdleResponse = util.now()
 handleTalk = (e) ->
 	return if e.command != 'speak'
+
+	if stringInText(nameAliases, e.text) and stringInText(idleAliases, e.text)
+		if util.now() - lastIdleResponse < maxIdleResponseFreq
+			log "Responded to idle request recently. Doing nothing."
+			return
+
+		window.lastIdleResponse = util.now()
+		log "Suspected idle check: #{e.text}"
+		resp = randomChoice(idleResponses)
+		log "Responding with #{resp}"
+		say(resp)
 
 
 # set turntable.lastMotionTime periodically
