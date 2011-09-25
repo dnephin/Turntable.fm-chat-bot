@@ -1,0 +1,9 @@
+
+Turntable.fm Bot
+
+Objectives:
+ - Prevent idle time from going over x seconds
+ - Automatically grab a DJ spot when one becomes available
+ - Respond to idle checks
+
+

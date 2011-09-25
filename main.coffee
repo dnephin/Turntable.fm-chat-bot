@@ -1,18 +1,26 @@
-###
- Objectives:
- - Prevent idle time from going over x seconds
- - Automatically grab a DJ spot
- - Respond to idle checks
-###
+# TODO: split into config.coffee, ttb.coffee, and util.coffee
+
+window.getRoom = ->
+	for k of turntable
+		v = turntable[k]
+		continue if not v
+		return v if v.creatorId
+
+window.getRoomManager = ->
+	for k of room
+		v = room[k]
+		continue if not v
+		return v if v.myuserid
 
 # Turntable
 tt = turntable
 # Room instance variable
-room = turntable.ODHwjeo
+window.room = getRoom()
 # Room manager
-roomman = gPRzNzkxTaCcJb
+window.roomman = getRoomManager()
 # Logging
 log = (m) -> console.log(m)
+
 
 # Max idle time that users will accept
 maxIdleTime = 6 * 60 * 1000
@@ -21,38 +29,64 @@ maxIdleResponseFreq = 15 * 1000
 
 # +Artists
 goodArtists = [
+	'apathy'
 	'big l'
 	'biz markie'
+	'black milk'
+	'black moon'
 	'black star'
+	'busta rhymes'
+	'celph titled'
+	'consequence'
+	'dead prez'
+	'dj premier'
+	'dr. dre'
+	'elzhi'
 	'epmd'
 	'eric sermon'
 	'gang starr'
+	'ghostface'
 	'gorillaz'
 	'group home'
 	'hieroglyphics'
+	'immortal technique'
 	'j dilla'
 	'jay dee'
 	'jay-z'
 	'jaylib'
 	'kanye west'
+	'krs one'
+	'krs-one'
+	'living legends'
+	'm.o.p.'
 	'mf doom'
 	'mos def'
+	'murs'
 	'nas'
+	'notorious b.i.g.'
 	'people under the stairs'
+	'pharoahe monch'
+	'raekwon'
 	'saigon'
+	'slum village'
 	'talib kweli'
+	'the beatnuts'
 	'the pharcyde'
 	'the roots'
+	'tribe called quest'
 	'wu tang'
 	'wu-tang'
+	'zion i'
 ]
 
 badArtists = [
 	'50 cent'
 	'curren$y'
+	'drake'
 	'kendrick'
 	'lil wayne'
 	'suave smooth'
+	'wiz kadafi'
 ]
 
 randomPhrases = [
@@ -65,13 +99,17 @@ randomPhrases = [
 	'...'
 	'^^'
 	'why'
+	'this reminds me of another song'
+	'my next play is the fire'
 ]
 
 nameAliases = [
 	'dne'
 	'dnep'
+	'dneph'
 	'dnephin'
 	'djs'
+	'you all'
 ]
 
 idleAliases = [
@@ -79,19 +117,31 @@ idleAliases = [
 	'checkin'
 	'there'
 	'idle'
+	'ther'
 ]
 
 idleResponses = [
+	"..."
+	"1.2.3."
 	"I'm here."
 	"here"
-	"what?"
-	"..."
+	"huh?"
+	"i am here"
 	"say again?"
-	"1.2.3."
+	"say what?"
+	"what"
+	"what?"
+	"why..."
+	"why?"
+	"ya"
+	"yes..."
+	'Roger'
+	'never'
+	'roger'
 ]
 
 window.updateIdle = ->
-	turntable.lastMotionTime = util.now()
+	tt.lastMotionTime = util.now()
 
 randomDelay = (min=2, max=70) ->
 	(Math.random() * max + min) * 1000
@@ -170,10 +220,9 @@ songChange = (e) ->
 	responseTimeout = setTimeout(action, randomDelay())
 
 
-# TODO: this is not working
 djLeft = (e) ->
 	return if e.command != "rem_dj"
-	if tt.user.id == e.user.userid
+	if tt.user.id == e.user[0].userid
 		log "I just stepped off or got booted."
 		return
 	if room.isDj()
@@ -204,7 +253,7 @@ handleTalk = (e) ->
 # set turntable.lastMotionTime periodically
 setInterval("updateIdle()", 1100)
 
-turntable.addEventListener('message', songChange)
-turntable.addEventListener('message', djLeft)
-turntable.addEventListener('message', handleTalk)
+tt.addEventListener('message', songChange)
+tt.addEventListener('message', djLeft)
+tt.addEventListener('message', handleTalk)
 
