@@ -6,4 +6,5 @@ Objectives:
  - Automatically grab a DJ spot when one becomes available
  - Respond to idle checks
 
-
+Build:
+  coffee --bare -l --watch --compile *.coffee
