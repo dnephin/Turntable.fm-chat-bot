@@ -27,21 +27,24 @@ songChange = (e) ->
 
 	log "Song: #{song.song} - #{song.artist}"
 	# Good
-	if stringInText(goodArtists, song.artist)
+	if stringInText(goodArtists, song.artist, false)
 		log "Going to upvote."
-		responseTimeout = setTimeout("voteYes()", randomDelay())
+		responseTimeout = setTimeout("voteYes()", randomDelay(max=40))
 		return
 	# Bad
-	if stringInText(badArtists, song.artist)
+	if stringInText(badArtists, song.artist, false)
 		log "Going to downvote."
-		responseTimeout = setTimeout("voteNo()", randomDelay())
+		responseTimeout = setTimeout("voteNo()", randomDelay(min=20))
 		return
 
 	# Unknown
-	action = randomChoice(['none', 'say', 'voteYes()', 'voteNo()'])
+	action = randomChoice(
+		['none', 'say', 'say', 'voteYes()', 'voteYes()', 'voteNo()'])
 	if action == 'none'
 		if util.now() - lastVisibleAction > maxIdleTime
-			action = randomChoice(['say', 'voteYes()', 'voteNo()'])
+			# Vote with a bias on yes
+			action = randomChoice(
+				['say', 'voteYes()', 'voteNo()', 'voteYes()'])
 		else
 			log 'Unknown artist, decided to do nothing.'
 			return
@@ -90,6 +93,13 @@ handleTalk = (e) ->
 
 # Set turntable.lastMotionTime periodically
 setInterval("updateIdle()", 1100)
+
+# TODO: trigger these on room change, and clear them on leaving a room
+
+# clear old handlers first
+tt.removeEventListener('message', songChange)
+tt.removeEventListener('message', djLeft)
+tt.removeEventListener('message', handleTalk)
 
 # Add handlers
 tt.addEventListener('message', songChange)

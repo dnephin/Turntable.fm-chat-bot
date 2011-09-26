@@ -33,9 +33,11 @@ randomChoice = (options) ->
 	options[idx]
 
 # Check for presence of at least one string from a list of strings within text
-stringInText = (strings, text) ->
+stringInText = (strings, text, forceWord=true) ->
+	text = text.toLowerCase()
 	for string in strings
 		string = string.toLowerCase()
+		string = " #{string} " if forceWord
 		if text.indexOf(string) > -1
 			return true
 	return false

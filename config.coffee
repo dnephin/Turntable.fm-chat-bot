@@ -17,6 +17,7 @@ goodArtists = [
 	'black moon'
 	'black star'
 	'busta rhymes'
+	'common'
 	'celph titled'
 	'consequence'
 	'dead prez'
@@ -59,6 +60,9 @@ goodArtists = [
 	'wu-tang'
 	'zion i'
 	'macklemore and ryan lewis'
+	'warren g'
+	'souls of mischief'
+	'q-tip'
 ]
 
 badArtists = [
@@ -69,6 +73,7 @@ badArtists = [
 	'lil wayne'
 	'suave smooth'
 	'wiz kadafi'
+	'dmx'
 ]
 
 randomPhrases = [
@@ -83,6 +88,7 @@ randomPhrases = [
 	'why'
 	'this reminds me of another song'
 	'my next play is the fire'
+	'?'
 ]
 
 nameAliases = [
@@ -94,6 +100,7 @@ nameAliases = [
 	'you all'
 	'everyone'
 	'dj ...'
+	'dj...'
 ]
 
 idleAliases = [
@@ -102,6 +109,7 @@ idleAliases = [
 	'there'
 	'idle'
 	'ther'
+	'here'
 ]
 
 idleResponses = [
