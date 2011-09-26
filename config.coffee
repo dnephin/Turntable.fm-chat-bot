@@ -14,6 +14,7 @@ goodArtists = [
 	'big l'
 	'biz markie'
 	'black milk'
+	'blackalicious'
 	'black moon'
 	'black star'
 	'busta rhymes'

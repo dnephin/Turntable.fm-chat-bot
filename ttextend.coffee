@@ -34,7 +34,7 @@ window.voteYes = ->
 	updateLastVisible()
 	lastVisibleAction = util.now()
 	roomman.callback('upvote')
-	log "Votes yes."
+	log "Voted yes."
 
 
 window.voteNo = ->
