@@ -72,8 +72,9 @@ badArtists = [
 	'kendrick'
 	'lil wayne'
 	'suave smooth'
-	'wiz kadafi'
+	'wiz khalifa'
 	'dmx'
+	'tech n9ne'
 ]
 
 randomPhrases = [

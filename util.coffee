@@ -19,10 +19,6 @@ window.getRoomManager = ->
 		continue if not v
 		return v if v.myuserid
 
-# Update idle time 
-window.updateIdle = ->
-	turntable.lastMotionTime = util.now()
-
 # Generate a random number within a range
 randomDelay = (min=2, max=70) ->
 	(Math.random() * max + min) * 1000

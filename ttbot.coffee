@@ -9,8 +9,6 @@
 
 # Global Id of the last response timeout
 window.responseTimeout = null
-# Timestamp of the last user visible action
-window.lastVisibleAction = util.now()
 
 # Handler for song changes
 songChange = (e) ->
@@ -38,24 +36,12 @@ songChange = (e) ->
 		return
 
 	# Unknown
-	action = randomChoice(
-		['none', 'say', 'say', 'voteYes()', 'voteYes()', 'voteNo()'])
-	if action == 'none'
-		if util.now() - lastVisibleAction > maxIdleTime
-			# Vote with a bias on yes
-			action = randomChoice(
-				['say', 'voteYes()', 'voteNo()', 'voteYes()'])
-		else
-			log 'Unknown artist, decided to do nothing.'
-			return
-	if action == 'say'
+	log 'Voting with room.'
+	func = -> voteWithRoom(voteMonitor, ->
 		log 'Saying a random phrase.'
-		phrase = randomChoice(randomPhrases)
-		responseTimeout = setTimeout("say('#{phrase}')", randomDelay())
-		return
-
-	log 'Voting randomly'
-	responseTimeout = setTimeout(action, randomDelay())
+		say(randomChoice(randomPhrases))
+	)
+	responseTimeout = setTimeout(func, randomDelay(min=45))
 
 
 # Handle DJ leaving the decks event
@@ -91,6 +77,23 @@ handleTalk = (e) ->
 		say(resp)
 
 
+# Keep track of vote changes, since TT only tracks upvotes
+class VoteMonitor
+
+	score: 0
+	voters: 0
+
+	handleVotes: (e) =>
+		@score = @voters = 0 if e.command == 'newsong'
+		return if e.command != 'update_votes'
+		data = e.room.metadata
+		@score = data.upvotes / data.downvotes
+		@voters = data.upvotes + data.downvotes
+
+
+window.voteMonitor = new VoteMonitor()
+
+
 # Set turntable.lastMotionTime periodically
 setInterval("updateIdle()", 1100)
 
@@ -100,9 +103,11 @@ setInterval("updateIdle()", 1100)
 tt.removeEventListener('message', songChange)
 tt.removeEventListener('message', djLeft)
 tt.removeEventListener('message', handleTalk)
+tt.removeEventListener('message', voteMonitor.handleVotes)
 
 # Add handlers
 tt.addEventListener('message', songChange)
 tt.addEventListener('message', djLeft)
 tt.addEventListener('message', handleTalk)
+tt.addEventListener('message', voteMonitor.handleVotes)
 

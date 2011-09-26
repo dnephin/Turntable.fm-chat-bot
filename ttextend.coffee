@@ -11,24 +11,41 @@ window.tt = turntable
 window.room = getRoom()
 # Room manager
 window.roomman = getRoomManager()
+# Timestamp of the last user visible action
+window.lastVisibleAction = util.now()
+
+# Update idle time 
+window.updateIdle = ->
+	turntable.lastMotionTime = util.now()
+
+
+window.updateLastVisible = ->
+	updateIdle()
+	lastVisibleAction = util.now()
 
 
 window.say = (msg) ->
-	updateIdle()
-	lastVisibleAction = util.now()
 	chatForm = $(room.nodes.chatForm)
 	chatForm.find('input').val(msg)
 	chatForm.submit()
 
+
 window.voteYes = ->
-	updateIdle()
+	updateLastVisible()
 	lastVisibleAction = util.now()
 	roomman.callback('upvote')
 	log "Votes yes."
 
+
 window.voteNo = ->
-	updateIdle()
+	updateLastVisible()
 	lastVisibleAction = util.now()
 	roomman.callback('downvote')
 	log "Voted no."
 
+
+window.voteWithRoom = (votes, fallback) ->
+	updateLastVisible()
+	return voteYes() if votes.voters > 0 and votes.score > 0.5
+	return voteNo() if votes.voters > 0
+	fallback() if fallback
