@@ -109,6 +109,18 @@ cleanupChat = ->
 	$('.header-text').remove()
 
 
+cleanupRoomTip = ->
+	$('.roomTip')
+		.css
+			background: 'transparent'
+			color: tt_red
+			top: '25px'
+			left: '193px'
+			height: '30px'
+		.html('<p class="text">')
+
+
+# TODO: trigger on room change.
 fixUI = ->
 	cleanupInfoBar()
 	moveAddSong()
@@ -116,6 +128,7 @@ fixUI = ->
 	moveSettings()
 	moveRoomButtons()
 	cleanupChat()
+	cleanupRoomTip()
 	$('#footer').hide()
 
 fixUI()
