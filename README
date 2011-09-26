@@ -11,6 +11,7 @@ Build:
 
 
 Possible Additions:
+ - auto fade out alert boxes after 2s 
  - If the track is bombing, say something in chat and skip
  - Say something on play to reset idle timers (or right before)
  - Lookup unknown artists on Freebase to determine proximity to a good artist

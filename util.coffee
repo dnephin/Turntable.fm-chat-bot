@@ -33,8 +33,8 @@ stringInText = (strings, text, forceWord=true) ->
 	text = text.toLowerCase()
 	for string in strings
 		string = string.toLowerCase()
-		string = " #{string} " if forceWord
-		if text.indexOf(string) > -1
+		string = /(^| )#{string}( |,|\.|\?|\!|\-|$)/ if forceWord
+		if text.search(string) > -1
 			return true
 	return false
 

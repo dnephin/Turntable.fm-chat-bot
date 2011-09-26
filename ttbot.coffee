@@ -65,7 +65,7 @@ window.lastIdleResponse = util.now()
 handleTalk = (e) ->
 	return if e.command != 'speak'
 
-	if stringInText(nameAliases, e.text) and stringInText(idleAliases, e.text)
+	if stringInText(nameAliases, e.text, false) and stringInText(idleAliases, e.text, false)
 		if util.now() - lastIdleResponse < maxIdleResponseFreq
 			log "Responded to idle request recently. Doing nothing."
 			return
@@ -73,8 +73,10 @@ handleTalk = (e) ->
 		window.lastIdleResponse = util.now()
 		log "Suspected idle check: #{e.text}"
 		resp = randomChoice(idleResponses)
-		log "Responding with #{resp}"
-		say(resp)
+		setTimeout(->
+			log "Responding with #{resp}"
+			say(resp)
+		, randomDelay(1, 3))
 
 
 # Keep track of vote changes, since TT only tracks upvotes
