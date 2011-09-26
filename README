@@ -11,10 +11,8 @@ Build:
 
 
 Possible Additions:
- - For unknown artists, vote with the room
+ - If the track is bombing, say something in chat and skip
  - Say something on play to reset idle timers (or right before)
- - Random phrases based on: next song in queue, position on the deck, 
- 	recent chat (no one talking/lots of chat), room voting activity
  - Lookup unknown artists on Freebase to determine proximity to a good artist
  	and vote accordingly
  - Turn into a chrome extension, with a button to activate

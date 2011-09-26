@@ -27,12 +27,12 @@ songChange = (e) ->
 	# Good
 	if stringInText(goodArtists, song.artist, false)
 		log "Going to upvote."
-		responseTimeout = setTimeout("voteYes()", randomDelay(max=40))
+		responseTimeout = setTimeout("voteYes()", randomDelay(3, 40))
 		return
 	# Bad
 	if stringInText(badArtists, song.artist, false)
 		log "Going to downvote."
-		responseTimeout = setTimeout("voteNo()", randomDelay(min=20))
+		responseTimeout = setTimeout("voteNo()", randomDelay(20))
 		return
 
 	# Unknown
@@ -41,7 +41,7 @@ songChange = (e) ->
 		log 'Saying a random phrase.'
 		say(randomChoice(randomPhrases))
 	)
-	responseTimeout = setTimeout(func, randomDelay(min=45))
+	responseTimeout = setTimeout(func, randomDelay(45))
 
 
 # Handle DJ leaving the decks event
