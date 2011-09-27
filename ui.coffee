@@ -14,27 +14,32 @@ cleanupInfoBar = ->
 	$('.share-on').remove()
 
 
+buttonLeft = 520
+styleButton = (ele) ->
+	buttonLeft += 30
+	$('.info').append(ele)
+	ele.css
+		background: tt_red
+		'text-align': 'center'
+		color: 'white'
+		'font-weight': 'bold'
+		'font-size': '22px'
+		height: '25px'
+		width: '25px'
+		'border-radius': '6px'
+		'margin-left': '5px'
+		border: '1px solid white'
+		position: 'absolute'
+		left: "#{buttonLeft}px"
+		top: '6px'
+		cursor: 'pointer'
+
+
 # Add song button
 moveAddSong = ->
 	a = $('.addSongsButton')
 		.remove()
 		.html('+')
-		.css
-			background: tt_red
-			'text-align': 'center'
-			color: 'white'
-			'font-weight': 'bold'
-			'font-size': '22px'
-			height: '25px'
-			width: '25px'
-			'border-radius': '6px'
-			'margin-left': '5px'
-			border: '1px solid white'
-			position: 'absolute'
-			left: '548px'
-			top: '6px'
-			cursor: 'pointer'
-
 		# TODO: can i get a reference to this from the original element?
 		.click ->
 			# Copied From TT
@@ -43,7 +48,7 @@ moveAddSong = ->
             $("#plupload .plupload.html5").css("width", $("#pickfiles").css("width"))
             $("#plupload .plupload.html5").css("height", $("#pickfiles").css("height"))
 
-	$('.info').append(a)
+	styleButton(a)
 
 cleanupAddSongViews = ->
 	e = $('.searchText')
@@ -72,22 +77,17 @@ moveSettings = ->
 		.css
 			width: '42px'
 			top: '51px'
-			left: '390px'
+			left: '510px'
 		.children('.menuItem.first').css(width: '34px')
 		.children('.text').remove()
 
+
 moveRoomButtons = ->
-	$('.room-buttons')
-		.css
-			'z-index': 1
-			top: '64px'
-			right: '-1px'
-			width: '119px'
-		.children('.list').css(width: '45px')
-		.siblings('.random').css
-			left: '45px'
-			width: '65px'
-			'border-right': '1px solid  black'
+	list = $('.list').html('L').remove().click(room.listRoomsShow)
+	random = $('.random').html('R').remove().click(tt.randomRoom)
+	styleButton(list)
+	styleButton(random)
+
 
 cleanupChat = ->
 	# Clear space
@@ -119,8 +119,10 @@ cleanupRoomTip = ->
 			height: '30px'
 		.html('<p class="text">')
 
+cleanupMeter = ->
+	$('#meterGauge, #meterNeedle').hide()
 
-# TODO: trigger on room change.
+
 fixUI = ->
 	cleanupInfoBar()
 	moveAddSong()
@@ -129,6 +131,7 @@ fixUI = ->
 	moveRoomButtons()
 	cleanupChat()
 	cleanupRoomTip()
+	cleanupMeter()
 	$('#footer').hide()
 
 fixUI()

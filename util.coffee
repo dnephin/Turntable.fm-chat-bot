@@ -3,7 +3,9 @@
 ###
 
 # Logging
-log = (m) -> console.log(m)
+log = (m) ->
+	dtfmt = new Date().toString('yyyy-MM-dd HH:mm:ss')
+	console.log("#{dtfmt} - #{m}")
 
 # Get room reference
 window.getRoom = ->
@@ -33,7 +35,7 @@ stringInText = (strings, text, forceWord=true) ->
 	text = text.toLowerCase()
 	for string in strings
 		string = string.toLowerCase()
-		string = /(^| )#{string}( |,|\.|\?|\!|\-|$)/ if forceWord
+		string = new RegExp("\\b#{string}\\b") if forceWord
 		if text.search(string) > -1
 			return true
 	return false

@@ -65,18 +65,22 @@ window.lastIdleResponse = util.now()
 handleTalk = (e) ->
 	return if e.command != 'speak'
 
-	if stringInText(nameAliases, e.text, false) and stringInText(idleAliases, e.text, false)
-		if util.now() - lastIdleResponse < maxIdleResponseFreq
-			log "Responded to idle request recently. Doing nothing."
-			return
+	return if not stringInText(nameAliases, e.text) || not stringInText(idleAliases, e.text) || e.text.length > 35
+	
+	if util.now() - lastIdleResponse < maxIdleResponseFreq
+		log "Responded to idle request recently. Doing nothing."
+		return
 
-		window.lastIdleResponse = util.now()
-		log "Suspected idle check: #{e.text}"
-		resp = randomChoice(idleResponses)
-		setTimeout(->
-			log "Responding with #{resp}"
-			say(resp)
-		, randomDelay(1, 3))
+	window.lastIdleResponse = util.now()
+	log "Suspected idle check: #{e.text}"
+	for i in [0..5]
+		setTimeout( -> turntablePlayer.playEphemeral(UI_SOUND_CHAT, true),
+		i*700)
+	resp = randomChoice(idleResponses)
+	setTimeout(->
+		log "Responding with #{resp}"
+		say(resp)
+	, randomDelay(1.5, 6))
 
 
 # Keep track of vote changes, since TT only tracks upvotes
@@ -86,30 +90,47 @@ class VoteMonitor
 	voters: 0
 
 	handleVotes: (e) =>
-		@score = @voters = 0 if e.command == 'newsong'
+		if e.command == 'newsong'
+			@score = @voters = 0
+			document.title = 'tt.fm'
 		return if e.command != 'update_votes'
-		data = e.room.metadata
+		@updateCounters(e.room.metadata)
+		@updateTitle(e.room.metadata)
+
+	updateCounters: (data) ->
 		@score = data.upvotes / data.downvotes
 		@voters = data.upvotes + data.downvotes
 
+	updateTitle: (data) ->
+		document.title = "+#{data.upvotes} -#{data.downvotes} | tt.fm"
+
 
 window.voteMonitor = new VoteMonitor()
-
 
 # Set turntable.lastMotionTime periodically
 setInterval("updateIdle()", 1100)
 
 # TODO: trigger these on room change, and clear them on leaving a room
 
-# clear old handlers first
-tt.removeEventListener('message', songChange)
-tt.removeEventListener('message', djLeft)
-tt.removeEventListener('message', handleTalk)
-tt.removeEventListener('message', voteMonitor.handleVotes)
+startVoter = ->
+	tt.removeEventListener('message', songChange)
+	tt.addEventListener('message', songChange)
 
-# Add handlers
-tt.addEventListener('message', songChange)
-tt.addEventListener('message', djLeft)
-tt.addEventListener('message', handleTalk)
-tt.addEventListener('message', voteMonitor.handleVotes)
+startStageJumper = ->
+	tt.removeEventListener('message', djLeft)
+	tt.addEventListener('message', djLeft)
 
+startIdleResponder = ->
+	tt.removeEventListener('message', handleTalk)
+	tt.addEventListener('message', handleTalk)
+
+startVoteMonitor = ->
+	tt.removeEventListener('message', voteMonitor.handleVotes)
+	tt.addEventListener('message', voteMonitor.handleVotes)
+
+startBot = () ->
+	startVoter()
+	startStageJumper()
+	startIdleResponder()
+
+startVoteMonitor()

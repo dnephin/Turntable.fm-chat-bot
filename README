@@ -11,11 +11,13 @@ Build:
 
 
 Possible Additions:
- - auto fade out alert boxes after 2s 
+ - Jump off the decks after some time
+ - call fixUI on room change
  - If the track is bombing, say something in chat and skip
  - Say something on play to reset idle timers (or right before)
  - Lookup unknown artists on Freebase to determine proximity to a good artist
  	and vote accordingly
  - Turn into a chrome extension, with a button to activate
- - UI improvements
+ - Jump to last spot if in first and not playing music
+ - could I use python nltk to get a better idea of the sentence structure?
 
