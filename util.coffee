@@ -40,3 +40,7 @@ stringInText = (strings, text, forceWord=true) ->
 			return true
 	return false
 
+# Add a case insensitive startsWith to String
+if (typeof String.prototype.startsWith != 'function')
+	String.prototype.startsWith = (str) ->
+		@search(new RegExp(str, 'i')) == 0

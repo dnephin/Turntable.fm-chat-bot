@@ -111,6 +111,7 @@ window.voteMonitor = new VoteMonitor()
 setInterval("updateIdle()", 1100)
 
 # TODO: trigger these on room change, and clear them on leaving a room
+# Also reset room/rooman references on room change
 
 startVoter = ->
 	tt.removeEventListener('message', songChange)

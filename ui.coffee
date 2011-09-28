@@ -14,25 +14,30 @@ cleanupInfoBar = ->
 	$('.share-on').remove()
 
 
-buttonLeft = 520
 styleButton = (ele) ->
 	buttonLeft += 30
 	$('.info').append(ele)
-	ele.css
+	style =
 		background: tt_red
 		'text-align': 'center'
-		color: 'white'
+		color: '#dbcb98'
 		'font-weight': 'bold'
 		'font-size': '22px'
 		height: '25px'
 		width: '25px'
-		'border-radius': '6px'
 		'margin-left': '5px'
-		border: '1px solid white'
+		border: '1px solid #dbcb98'
 		position: 'absolute'
 		left: "#{buttonLeft}px"
 		top: '6px'
 		cursor: 'pointer'
+	ele.css(style)
+	ele.hover(->
+		$(@).css
+			background: '#900000'
+			border: '1px outset #dbcb98'
+	, -> $(@).css(style))
+	
 
 
 # Add song button
@@ -70,6 +75,7 @@ cleanupAddSongViews = ->
 			'font-weight': 'bold'
 			'text-decoration': 'underline'
 		).html('Cancel')
+	$('.buy').remove()
 
 
 moveSettings = ->
@@ -83,8 +89,8 @@ moveSettings = ->
 
 
 moveRoomButtons = ->
-	list = $('.list').html('L').remove().click(room.listRoomsShow)
-	random = $('.random').html('R').remove().click(tt.randomRoom)
+	list = $('.list').html('l').remove().click(room.listRoomsShow)
+	random = $('.random').html('~').remove().click(tt.randomRoom)
 	styleButton(list)
 	styleButton(random)
 
@@ -93,12 +99,12 @@ cleanupChat = ->
 	# Clear space
 	c = $('.queueView .songlist')
 	c.css(top: 0)
-		.height(c.height() + 42)
-	turntable.playlist.setPlaylistHeight(room.chatOffsetTop + 42)
+		.height(c.height() + 43)
+	turntable.playlist.setPlaylistHeight(room.chatOffsetTop + 43)
 	# TODO: this doesn't prevent the grey box from showing when the size is changing
 	# Setup callback when changed.
 	$('.chatHeader').bind("mouseup mouseout", (e) ->
-		turntable.playlist.setPlaylistHeight(room.chatOffsetTop + 42)
+		turntable.playlist.setPlaylistHeight(room.chatOffsetTop + 43)
 	)
 
 	$('.chat-container .input-box').css
@@ -121,9 +127,87 @@ cleanupRoomTip = ->
 
 cleanupMeter = ->
 	$('#meterGauge, #meterNeedle').hide()
+	voteButtons = $('.roomView').children('div').children('a[id]')
+	$(voteButtons[1]).css(left: '241px')
+
+
+loadFonts = ->
+	google.load("webfont", "1")
+	google.setOnLoadCallback ->
+		WebFont.load
+			google:
+				families: ['Open Sans']
+
+fixFonts = ->
+	# TODO: move to css file
+	$('#ttbstyle').remove()
+	$('head').append("""
+	<style id="ttbstyle">
+		.chat-container .messages {
+			background-color: black;
+			font-family: 'Open Sans';
+			color: white;
+		}
+		.chat-container .messages .message:nth-child(odd) {
+			background-color: #151515;
+		}
+		.chat-container .input-box input {
+			font-family: 'Open Sans';
+		}
+		.chat-container .messages .message .speaker {
+			color: #dbcb98
+		}
+
+		.playlist-container .song, .playlist-container .uploading {
+			background-color: black;
+			color: white;
+			border-bottom: 0;
+			font-family: 'Open Sans';
+		}
+		.playlist-container .song.nth-child-even, .playlist-container .uploading:nth-child(even) {
+			background-color: #151515;
+			color: white;
+		}
+		.playlist-container .song:hover {
+			background-color: #222;
+		}
+		.playlist-container .song .title, .playlist-container .processing .text, .playlist-container .uploading .text {
+			color: white;
+		}
+		.playlist-container .queueView .song.currentSong {
+			background-color: #{tt_red}
+		}
+		.playlist-container .song .progress {
+			background-color: #333;
+		}
+	</style>
+	""")
+
+class SongSearcher
+
+	search: (text) ->
+		for file in tt.playlist.files
+			song = file.metadata.song
+			if song.startsWith(text)
+				return @toTop(@eleFromName(song))
+
+	toTop: (ele) ->
+		containerPos = $('.queue.realPlaylist').offset()
+		pos = ele.offset()
+		$('.queueView .songlist').scrollTop pos.top - containerPos.top - 8
+
+	eleFromName: (name) ->
+		$("div[title=\"#{name}\"]")
+		
+
+songSearcher = new SongSearcher()
+	
 
 
 fixUI = ->
+	window.buttonLeft = 520
+	loadFonts()
+	fixFonts()
 	cleanupInfoBar()
 	moveAddSong()
 	cleanupAddSongViews()

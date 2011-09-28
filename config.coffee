@@ -38,8 +38,9 @@ goodArtists = [
 	'ghostface'
 	'gorillaz'
 	'group home'
-	'gurassic 5'
+	'jurassic 5'
 	'guru'
+	'gza'
 	'hieroglyphics'
 	'immortal technique'
 	'j dilla'
@@ -116,6 +117,8 @@ nameAliases = [
 	'dnephin'
 	'everyone'
 	'you all'
+	'starpun'
+	'star'
 ]
 
 idleAliases = [

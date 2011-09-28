@@ -14,6 +14,7 @@ load = (imports) ->
 
 libs = [
 	'http://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js'
+	'https://www.google.com/jsapi'
 ]
 
 code = [
@@ -27,6 +28,5 @@ code = [
 codePath = 'http://localhost/'
 
 codeImports = (codePath + c for c in code)
-
+libs.push c for c in codeImports
 load(libs)
-load(codeImports)
