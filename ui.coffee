@@ -183,25 +183,27 @@ fixFonts = ->
 	</style>
 	""")
 
-class SongSearcher
-
-	search: (text) ->
-		for file in tt.playlist.files
-			song = file.metadata.song
-			if song.startsWith(text)
-				return @toTop(@eleFromName(song))
-
-	toTop: (ele) ->
-		containerPos = $('.queue.realPlaylist').offset()
-		pos = ele.offset()
-		$('.queueView .songlist').scrollTop pos.top - containerPos.top - 8
-
-	eleFromName: (name) ->
-		$("div[title=\"#{name}\"]")
-		
-
-songSearcher = new SongSearcher()
-	
+addSearch = ->
+	$('#ttbss').remove()
+	$('body').append(
+		$('<div id="ttbss">').append(
+			$('<input>').keyup( ->
+				songSearcher.search($(@).val())
+			).css
+				border: 0
+				background: 'transparent'
+				color: 'white'
+				outline: 'none'
+		).css
+			border: 0
+			background: 'black'
+			color: 'white'
+			top: '15px'
+			left: '532px'
+			position: 'absolute'
+			'z-index': 200
+			padding: '5px'
+	)
 
 
 fixUI = ->

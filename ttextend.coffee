@@ -59,18 +59,32 @@ window.stopDJing = (delay=0) ->
 class SongSearcher
 
 	search: (text) ->
+		return if text.length < 1
+		# Search by song name first
 		for file in tt.playlist.files
 			song = file.metadata.song
 			if song.startsWith(text)
 				return @toTop(@eleFromName(song))
+		# Search for artist name
+		for file in tt.playlist.files
+			artist = file.metadata.artist
+			if artist.startsWith(text)
+				eleTitle = @artistEleTitle(file.metadata)
+				return @toTop(@eleFromName(eleTitle))
 
 	toTop: (ele) ->
 		containerPos = $('.queue.realPlaylist').offset()
 		pos = ele.offset()
-		$('.queueView .songlist').scrollTop pos.top - containerPos.top - 8
+		newPos = pos.top - containerPos.top - ele.position().top
+		$('.queueView .songlist').scrollTop newPos
 
 	eleFromName: (name) ->
 		$("div[title=\"#{name}\"]")
+
+	artistEleTitle: (data) ->
+		min = Math.floor(data.length / 60)
+		sec = data.length % 60
+		"#{data.artist} - #{min}:#{sec}"
 		
 
 songSearcher = new SongSearcher()

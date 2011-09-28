@@ -11,7 +11,9 @@ Build:
 
 
 Possible Additions:
- - text search
+ - Text search to next match (after matching once)
+ - Identify songs that have been played recently, and alert if you have them
+ 	(or even just move them down the queue)
  - call fixUI on room change
  - If the track is bombing, say something in chat and skip
  - Say something on play to reset idle timers (or right before)
