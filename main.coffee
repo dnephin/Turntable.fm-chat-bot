@@ -18,6 +18,7 @@ libs = [
 ]
 
 code = [
+	'jquery.mousewheel.min.js'
 	'config.js'
 	'util.js'
 	'ttextend.js'

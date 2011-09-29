@@ -185,7 +185,7 @@ fixFonts = ->
 
 addSearch = ->
 	$('#ttbss').remove()
-	$('body').append(
+	$('.header').append(
 		$('<div id="ttbss">').append(
 			$('<input>').keyup( ->
 				songSearcher.search($(@).val())
@@ -205,9 +205,19 @@ addSearch = ->
 			padding: '5px'
 	)
 
+cleanupScrollbars = ->
+
+	$(".queueView .songlist, .chat-container .messages")
+		.mousewheel( (event, delta) ->
+			event.preventDefault()
+			newPos = $(@).scrollTop() + delta * - mouseScrollSpeed
+			$(@).scrollTop(newPos)
+		).css
+			overflow: 'hidden'
+
 
 fixUI = ->
-	window.buttonLeft = 520
+	window.buttonLeft = 494
 	loadFonts()
 	fixFonts()
 	cleanupInfoBar()
@@ -218,6 +228,8 @@ fixUI = ->
 	cleanupChat()
 	cleanupRoomTip()
 	cleanupMeter()
+	addSearch()
+	cleanupScrollbars()
 	$('#footer').hide()
 
 fixUI()

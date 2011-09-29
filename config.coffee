@@ -8,9 +8,10 @@
 maxIdleTime = 6 * 60 * 1000
 # Max idle response frequency
 maxIdleResponseFreq = 15 * 1000
+# Scroll speed
+mouseScrollSpeed = 25
 
 goodArtists = [
-	'CunninLynguists'
 	'apathy'
 	'atmosphere'
 	'big daddy kane'
@@ -26,6 +27,7 @@ goodArtists = [
 	'classified'
 	'common'
 	'consequence'
+	'cunninLynguists'
 	'de la soul'
 	'dead prez'
 	'dj premier'
@@ -38,7 +40,6 @@ goodArtists = [
 	'ghostface'
 	'gorillaz'
 	'group home'
-	'jurassic 5'
 	'guru'
 	'gza'
 	'hieroglyphics'
@@ -47,6 +48,7 @@ goodArtists = [
 	'jay dee'
 	'jay-z'
 	'jaylib'
+	'jurassic 5'
 	'kanye west'
 	'krs one'
 	'krs-one'
@@ -70,6 +72,7 @@ goodArtists = [
 	'souls of mischief'
 	'talib kweli'
 	'the beatnuts'
+	'the coup'
 	'the pharcyde'
 	'the roots'
 	'tribe called quest'
@@ -117,8 +120,9 @@ nameAliases = [
 	'dnephin'
 	'everyone'
 	'you all'
-	'starpun'
-	'star'
+	'leetcat'
+	'leet'
+	'cat'
 ]
 
 idleAliases = [
@@ -134,11 +138,11 @@ idleAliases = [
 
 idleResponses = [
 	"..."
-	"1.2.3."
 	"I'm here."
 	"here"
 	"huh?"
 	"i am here"
+	"i'm here"
 	"say again?"
 	"say what?"
 	"what"
