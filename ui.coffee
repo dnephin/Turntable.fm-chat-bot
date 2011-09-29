@@ -225,6 +225,8 @@ cleanupScrollbars = ->
 			$(@).scrollTop(newPos)
 		).css
 			overflow: 'hidden'
+	$('.queue.realPlaylist').css
+			width: '100%'
 
 
 fixUI = ->
