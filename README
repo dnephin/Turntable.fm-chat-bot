@@ -11,7 +11,6 @@ Build:
 
 
 Possible Additions:
- - Text search to next match (after matching once)
  - Identify songs that have been played recently, and alert if you have them
  	(or even just move them down the queue)
  - call fixUI on room change
@@ -20,4 +19,4 @@ Possible Additions:
  - Lookup unknown artists on Freebase to determine proximity to a good artist
  	and vote accordingly
  - could I use python nltk to get a better idea of the sentence structure?
-
+ - improved playlist management

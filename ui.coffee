@@ -1,3 +1,9 @@
+###
+ ui.coffee
+
+ UI improvements and additional features.
+###
+
 
 tt_yellow = '#d9a527'
 tt_red = '#7a0000'
@@ -11,6 +17,9 @@ cleanupInfoBar = ->
 	i.children('.faqButton, .feedback').remove()
 	i.find('.room .name').css
 		color: '#ddd'
+		'font-family': 'Open Sans'
+		height: '24px'
+		padding: 0
 	$('.share-on').remove()
 
 
@@ -187,19 +196,21 @@ addSearch = ->
 	$('#ttbss').remove()
 	$('.header').append(
 		$('<div id="ttbss">').append(
-			$('<input>').keyup( ->
+			$('<input>').keyup( (e) ->
 				songSearcher.search($(@).val())
 			).css
 				border: 0
 				background: 'transparent'
 				color: 'white'
 				outline: 'none'
+				width: '216px'
+				'font-family': 'Open Sans'
 		).css
 			border: 0
 			background: 'black'
 			color: 'white'
 			top: '15px'
-			left: '532px'
+			left: '528px'
 			position: 'absolute'
 			'z-index': 200
 			padding: '5px'
