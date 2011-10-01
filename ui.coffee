@@ -46,7 +46,6 @@ styleButton = (ele) ->
 			background: '#900000'
 			border: '1px outset #dbcb98'
 	, -> $(@).css(style))
-	
 
 
 # Add song button
@@ -134,10 +133,15 @@ cleanupRoomTip = ->
 			height: '30px'
 		.html('<p class="text">')
 
+
 cleanupMeter = ->
 	$('#meterGauge, #meterNeedle').hide()
 	voteButtons = $('.roomView').children('div').children('a[id]')
-	$(voteButtons[1]).css(left: '241px')
+	$(voteButtons[1])
+		.css(left: '241px')
+	$(voteButtons).click( ->
+		eventHandlers.autoVoter.clearPending()
+	)
 
 
 loadFonts = ->
@@ -147,6 +151,7 @@ loadFonts = ->
 			google:
 				families: ['Open Sans']
 
+
 fixFonts = ->
 	# TODO: move to css file
 	$('#ttbstyle').remove()
@@ -154,14 +159,14 @@ fixFonts = ->
 	<style id="ttbstyle">
 		.chat-container .messages {
 			background-color: black;
-			font-family: 'Open Sans';
+			font-family: 'Open Sans', sans-serif;
 			color: white;
 		}
 		.chat-container .messages .message:nth-child(odd) {
 			background-color: #151515;
 		}
 		.chat-container .input-box input {
-			font-family: 'Open Sans';
+			font-family: 'Open Sans', sans-serif;
 		}
 		.chat-container .messages .message .speaker {
 			color: #dbcb98
@@ -171,7 +176,7 @@ fixFonts = ->
 			background-color: black;
 			color: white;
 			border-bottom: 0;
-			font-family: 'Open Sans';
+			font-family: 'Open Sans', sans-serif;
 		}
 		.playlist-container .song.nth-child-even, .playlist-container .uploading:nth-child(even) {
 			background-color: #151515;
@@ -191,6 +196,7 @@ fixFonts = ->
 		}
 	</style>
 	""")
+
 
 addSearch = ->
 	$('#ttbss').remove()
@@ -216,6 +222,7 @@ addSearch = ->
 			padding: '5px'
 	)
 
+
 cleanupScrollbars = ->
 
 	$(".queueView .songlist, .chat-container .messages")
@@ -228,6 +235,52 @@ cleanupScrollbars = ->
 	$('.queue.realPlaylist').css
 			width: '100%'
 
+
+# Place avatars
+class PlaceAvatars
+	placements: []
+
+	placeAvatar: =>
+		placementId = @getPlacementId()
+		# Go random after 28
+		return @getRandom() if placementId >= 28
+
+		userids = []
+		userids.push(uid) for uid of room.users
+
+		i = x = y = 0
+		while i < placementId
+			i++
+
+			xop = i % 7
+			if xop in [1,5]
+				x += 70
+			if xop == 3
+				x -= 70
+			if xop in [2,4,6]
+				x *= -1
+			[x,y] = [0, y + 75] if i % 7 == 0
+
+		[x,y] = [x + 232, y + 250]
+		@placements.push(userids[i])
+		return [x, y]
+
+	getPlacementId: ->
+		for i in [0..@placements.length-1]
+			return i if not room.users[@placements[i]]
+		return @placements.length
+
+	getRandom: ->
+		j = Math
+		x = Math.floor(j.random() * 450)
+		y = Math.floor(j.random() * 280) + 200
+		return [x, y]
+
+
+pa = new PlaceAvatars()
+roomman.getRandFloorLocation = pa.placeAvatar
+for uid, user of room.users
+	room.updateUser(user)
 
 fixUI = ->
 	window.buttonLeft = 494

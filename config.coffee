@@ -35,6 +35,7 @@ goodArtists = [
 	'elzhi'
 	'epmd'
 	'erick sermon'
+	'evidence'
 	'gang starr'
 	'geto boys'
 	'ghostface'
@@ -80,6 +81,7 @@ goodArtists = [
 	'wu tang'
 	'wu-tang'
 	'zion i'
+	'rakim'
 ]
 
 badArtists = [
