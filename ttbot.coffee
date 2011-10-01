@@ -7,15 +7,25 @@
 	- Jump onto the decks when a spot opens
 ###
 
+class EventHandler
+
+	start: ->
+		@stop()
+		tt.addEventListener('message', @handler)
+
+	stop: ->
+		tt.removeEventListener('message', @handler)
+
+
 # Cast votes based on preferences.
 # Depends on VoteMonitor
-class AutoVoter
+class AutoVoter extends EventHandler
 
 	# Id of the last response timeout
 	responseTimeout: null
 
 	# Handler for song changes
-	songChange: (e) ->
+	handler: (e) =>
 		return if e.command != "newsong"
 		@clearPending()
 		
@@ -46,13 +56,6 @@ class AutoVoter
 		)
 		@responseTimeout = setTimeout(func, randomDelay(45))
 
-	start: =>
-		@stop()
-		tt.addEventListener('message', @songChange)
-
-	stop: =>
-		tt.removeEventListener('message', @songChange)
-
 	# Clear old callbacks
 	clearPending: ->
 		log "Clearing vote callback."
@@ -60,9 +63,9 @@ class AutoVoter
 
 
 # Handle DJ leaving the decks event
-class StageJumper
+class StageJumper extends EventHandler
 
-	djLeft = (e) ->
+	handler: (e) =>
 		return if e.command != "rem_dj"
 		if tt.user.id == e.user[0].userid
 			log "I just stepped off or got booted."
@@ -75,22 +78,15 @@ class StageJumper
 		roomman.callback("become_dj", roomman.become_dj.data('spot'))
 		log "Grabbing the spot!"
 
-	stop: =>
-		tt.removeEventListener('message', @djLeft)
-
-	start: =>
-		@stop()
-		tt.addEventListener('message', @djLeft)
-
 
 # Respond to idle checks
-class AutoResponder
+class AutoResponder extends EventHandler
 	
 	# Timestamp of the last response to an idle check
 	lastIdleResponse: util.now()
 
 	# Handle idle check in chat
-	handleTalk: (e) ->
+	handler: (e) =>
 		return if e.command != 'speak'
 	
 		return if not stringInText(nameAliases, e.text)
@@ -116,33 +112,25 @@ class AutoResponder
 				turntablePlayer.playEphemeral(UI_SOUND_CHAT, true)
 			, i*700)
 
-	stop: =>
-		tt.removeEventListener('message', @handleTalk)
-
-	start: =>
-		@stop()
-		tt.addEventListener('message', @handleTalk)
-
 
 # Keep track of vote changes, since TT only tracks upvotes
-class VoteMonitor
+class VoteMonitor extends EventHandler
 
 	score: 0
 	voters: 0
 	upvoters: []
 	downvoters: []
 
-	handleVotes: (e) =>
+	handler: (e) =>
 		if e.command == 'newsong'
 			@score = @voters = 0
 			@upvoters = []
-			@dowvoters = []
+			@downvoters = []
 			document.title = 'tt.fm'
 		return if e.command != 'update_votes'
 		@updateCounters(e.room.metadata)
 		@updateTitle(e.room.metadata)
-		@recordVote(e.room.metadata.votelog)
-		console.log(e)
+		@recordVote(e.room.metadata.votelog[0])
 
 	updateCounters: (data) ->
 		@score = data.upvotes / data.downvotes
@@ -155,21 +143,13 @@ class VoteMonitor
 		if data[1] == 'up'
 			@upvoters.push(data[0])
 		else
-			@downcoters.push(data[0])
+			@downvoters.push(data[0])
 
 	getVoters: () ->
 		u = room.users
-		ups = [u.userid.name for userid in @upvoters]
-		downs = [u.userid.name for userid in @downvoters]
+		ups = [u[userid].name for userid in @upvoters]
+		downs = [u[userid].name for userid in @downvoters]
 		log "Up votes:#{ups.join(',')} - Down Votes:#{downs.join(',')}"
-
-
-	start: =>
-		@stop()
-		tt.addEventListener('message', @handleVotes)
-
-	stop: =>
-		tt.removeEventListener('message', @handleVotes)
 
 
 # Set turntable.lastMotionTime periodically
