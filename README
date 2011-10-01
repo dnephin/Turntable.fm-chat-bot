@@ -9,14 +9,16 @@ Objectives:
 Build:
   coffee --bare -l --watch --compile *.coffee
 
+Run:
+	$.getScript('main.js')
 
 Possible Additions:
+ - fix upload button
+ - cancel afk response
  - Identify songs that have been played recently, and alert if you have them
  	(or even just move them down the queue)
- - call fixUI on room change
+ - call fixUI on room change, and reset handlers
  - If the track is bombing, say something in chat and skip
- - Say something on play to reset idle timers (or right before)
- - Lookup unknown artists on Freebase to determine proximity to a good artist
- 	and vote accordingly
+ - Lookup unknown artists on Freebase or last.fm to determine proximity to a 
+ 	good/bad artist and vote accordingly
  - could I use python nltk to get a better idea of the sentence structure?
- - improved playlist management

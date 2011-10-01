@@ -68,6 +68,7 @@ goodArtists = [
 	'public enemy'
 	'q-tip'
 	'raekwon'
+	'rakim'
 	'saigon'
 	'slum village'
 	'souls of mischief'
@@ -81,7 +82,6 @@ goodArtists = [
 	'wu tang'
 	'wu-tang'
 	'zion i'
-	'rakim'
 ]
 
 badArtists = [
@@ -98,7 +98,6 @@ badArtists = [
 ]
 
 randomPhrases = [
-	'.'
 	'...'
 	'?'
 	'^^'
@@ -106,7 +105,6 @@ randomPhrases = [
 	'hmmm'
 	'i dunno about this track'
 	'lol'
-	'my next play is the fire'
 	'this reminds me of another song'
 	'why'
 	'word'
@@ -125,6 +123,7 @@ nameAliases = [
 	'leetcat'
 	'leet'
 	'cat'
+	'leecat'
 ]
 
 idleAliases = [
