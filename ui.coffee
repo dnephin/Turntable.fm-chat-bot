@@ -267,6 +267,7 @@ class PlaceAvatars
 
 	getPlacementId: ->
 		for i in [0..@placements.length-1]
+			return i if room.djIds[@placements[i]]
 			return i if not room.users[@placements[i]]
 		return @placements.length
 
