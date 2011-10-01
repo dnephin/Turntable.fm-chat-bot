@@ -46,7 +46,7 @@ window.voteNo = ->
 
 window.voteWithRoom = (votes, fallback) ->
 	updateLastVisible()
-	return voteYes() if votes.voters > 0 and votes.score > 0.5
+	return voteYes() if votes.voters > 0 and votes.score >= 0.5
 	return voteNo() if votes.voters > 0
 	fallback() if fallback
 

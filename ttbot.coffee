@@ -58,8 +58,9 @@ class AutoVoter extends EventHandler
 
 	# Clear old callbacks
 	clearPending: ->
-		log "Clearing vote callback."
-		clearTimeout(@responseTimeout) if @responseTimeout
+		if @responseTimeout
+			log "Clearing vote callback."
+			clearTimeout(@responseTimeout)
 
 
 # Handle DJ leaving the decks event
@@ -85,6 +86,8 @@ class AutoResponder extends EventHandler
 	# Timestamp of the last response to an idle check
 	lastIdleResponse: util.now()
 
+	responseTimeout: null
+
 	# Handle idle check in chat
 	handler: (e) =>
 		return if e.command != 'speak'
@@ -101,7 +104,7 @@ class AutoResponder extends EventHandler
 		@lastIdleResponse = util.now()
 		log "Suspected idle check: #{e.text}"
 		resp = randomChoice(idleResponses)
-		setTimeout(->
+		@responseTimeout = setTimeout(->
 			log "Responding with #{resp}"
 			say(resp)
 		, randomDelay(2, 8))
@@ -133,7 +136,7 @@ class VoteMonitor extends EventHandler
 		@recordVote(e.room.metadata.votelog[0])
 
 	updateCounters: (data) ->
-		@score = data.upvotes / data.downvotes
+		@score = data.upvotes / (data.downvotes + data.upvotes)
 		@voters = data.upvotes + data.downvotes
 
 	updateTitle: (data) ->

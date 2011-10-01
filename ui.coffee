@@ -238,15 +238,14 @@ cleanupScrollbars = ->
 
 # Place avatars
 class PlaceAvatars
-	placements: []
+	placements: {}
 
 	placeAvatar: =>
 		placementId = @getPlacementId()
 		# Go random after 28
 		return @getRandom() if placementId >= 28
 
-		userids = []
-		userids.push(uid) for uid of room.users
+		userids = (uid for uid of room.users)
 
 		i = x = y = 0
 		while i < placementId
@@ -262,14 +261,14 @@ class PlaceAvatars
 			[x,y] = [0, y + 75] if i % 7 == 0
 
 		[x,y] = [x + 232, y + 250]
-		@placements.push(userids[i])
+		@placements[i] = userids[i]
 		return [x, y]
 
 	getPlacementId: ->
-		for i in [0..@placements.length-1]
-			return i if room.djIds[@placements[i]]
-			return i if not room.users[@placements[i]]
-		return @placements.length
+		for i, uid of @placements
+			return i if room.djIds[uid]
+			return i if not room.users[uid]
+		return parseInt(i)+1
 
 	getRandom: ->
 		j = Math
