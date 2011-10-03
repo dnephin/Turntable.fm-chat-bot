@@ -76,7 +76,9 @@ class StageJumper extends EventHandler
 			return
 	
 		updateIdle()
-		roomman.callback("become_dj", roomman.become_dj.data('spot'))
+		setTimeout( ->
+			roomman.callback("become_dj", roomman.become_dj.data('spot'))
+		, stageJumpDelay)
 		log "Grabbing the spot!"
 
 
@@ -92,8 +94,10 @@ class AutoResponder extends EventHandler
 	handler: (e) =>
 		return if e.command != 'speak'
 	
-		return if not stringInText(nameAliases, e.text)
-		@playAlertSound()
+		if stringInText(nameAliases, e.text)
+			@playAlertSound()
+		else
+			return if not stringInText(generalNameAliases, e.text)
 
 		return if not stringInText(idleAliases, e.text) || e.text.length > 35
 		

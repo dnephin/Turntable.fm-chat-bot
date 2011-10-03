@@ -10,6 +10,8 @@ maxIdleTime = 6 * 60 * 1000
 maxIdleResponseFreq = 15 * 1000
 # Scroll speed
 mouseScrollSpeed = 25
+# Delay to add to stage jumping
+stageJumpDelay = 100
 
 goodArtists = [
 	'apathy'
@@ -30,6 +32,7 @@ goodArtists = [
 	'cunninLynguists'
 	'de la soul'
 	'dead prez'
+	'dilated peoples'
 	'dj premier'
 	'dr. dre'
 	'elzhi'
@@ -113,17 +116,17 @@ randomPhrases = [
 nameAliases = [
 	'dj ...'
 	'dj...'
-	'djs'
-	'dne'
-	'dnep'
-	'dneph'
-	'dnephin'
-	'everyone'
-	'you all'
 	'leetcat'
 	'leet'
 	'cat'
 	'leecat'
+	'lee'
+]
+
+generalNameAliases = [
+	'djs'
+	'everyone'
+	'you all'
 ]
 
 idleAliases = [

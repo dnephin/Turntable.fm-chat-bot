@@ -276,11 +276,13 @@ class PlaceAvatars
 		y = Math.floor(j.random() * 280) + 200
 		return [x, y]
 
+	draw: ->
+		for uid, user of room.users
+			room.updateUser(user)
+
 
 pa = new PlaceAvatars()
 roomman.getRandFloorLocation = pa.placeAvatar
-for uid, user of room.users
-	room.updateUser(user)
 
 fixUI = ->
 	window.buttonLeft = 494
@@ -299,3 +301,4 @@ fixUI = ->
 	$('#footer').hide()
 
 fixUI()
+pa.draw()
