@@ -113,9 +113,8 @@ randomPhrases = [
 	'word'
 ]
 
+# Used as a regex
 nameAliases = [
-	'dj ...'
-	'dj...'
 	'leetcat'
 	'leet'
 	'cat'

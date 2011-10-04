@@ -11,7 +11,7 @@ Build:
   coffee --bare -l --watch --compile *.coffee
 
 Run Instructions:
-	1. Setup config.coffee
+	1. Modify config.coffee
 	2. Build the javascript using the command above
 	3. Host the js files somewhere (these instructions assume locally on port 80)
 	4. Run in the console:
@@ -20,6 +20,7 @@ Run Instructions:
 
 
 Possible Additions:
+ - fix placement by looking at user list on place and registering location on the user
  - fix upload button
  - cancel afk response
  - Identify songs that have been played recently, and alert if you have them

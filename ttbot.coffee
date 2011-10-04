@@ -90,6 +90,8 @@ class AutoResponder extends EventHandler
 
 	responseTimeout: null
 
+	muteAlert: false
+
 	# Handle idle check in chat
 	handler: (e) =>
 		return if e.command != 'speak'
@@ -114,6 +116,7 @@ class AutoResponder extends EventHandler
 		, randomDelay(2, 8))
 
 	playAlertSound: ->
+		return if @muteAlert
 		for i in [0..5]
 			setTimeout( ->
 				turntablePlayer.playEphemeral(UI_SOUND_CHAT, true)
@@ -176,5 +179,11 @@ startBot = () ->
 	eventHandlers.autoVoter.start()
 	eventHandlers.stageJumper.start()
 	eventHandlers.autoResponder.start()
+
+stopBot = () ->
+	eventHandlers.autoVoter.stop()
+	eventHandlers.stageJumper.stop()
+	eventHandlers.autoResponder.stop()
+
 
 eventHandlers.voteMonitor.start()
