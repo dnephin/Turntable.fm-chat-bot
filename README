@@ -20,7 +20,7 @@ Run Instructions:
 
 
 Possible Additions:
- - fix placement by looking at user list on place and registering location on the user
+ - fix getVoters, broken when someone leaves the room after voting. (save name on vote?)
  - fix upload button
  - cancel afk response
  - Identify songs that have been played recently, and alert if you have them

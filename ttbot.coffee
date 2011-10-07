@@ -59,7 +59,6 @@ class AutoVoter extends EventHandler
 	# Clear old callbacks
 	clearPending: ->
 		if @responseTimeout
-			log "Clearing vote callback."
 			clearTimeout(@responseTimeout)
 
 
@@ -187,3 +186,11 @@ stopBot = () ->
 
 
 eventHandlers.voteMonitor.start()
+
+window.stopDJing = (delay=0) ->
+	setTimeout( ->
+		stopBot()
+		roomman.callback('rem_dj')
+	, delay)
+
+

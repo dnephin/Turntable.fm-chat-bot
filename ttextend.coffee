@@ -50,12 +50,6 @@ window.voteWithRoom = (votes, fallback) ->
 	return voteNo() if votes.voters > 0
 	fallback() if fallback
 
-window.stopDJing = (delay=0) ->
-	setTimeout( ->
-		roomman.callback('rem_dj')
-	, delay)
-
-
 class SongSearcher
 
 	lastText: null

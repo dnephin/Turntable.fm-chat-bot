@@ -238,17 +238,14 @@ cleanupScrollbars = ->
 
 # Place avatars
 class PlaceAvatars
-	placements: {}
 
-	placeAvatar: =>
-		placementId = @getPlacementId()
-		# Go random after 28
-		return @getRandom() if placementId >= 28
+	placeAvatar: (user) =>
+		placementId = user.placement
+		placements = (d.placement for uid, d of room.users)
 
-		userids = (uid for uid of room.users)
-
-		i = x = y = 0
-		while i < placementId
+		x = y = 0
+		i = -1
+		while true
 			i++
 
 			xop = i % 7
@@ -258,17 +255,15 @@ class PlaceAvatars
 				x -= 70
 			if xop in [2,4,6]
 				x *= -1
-			[x,y] = [0, y + 75] if i % 7 == 0
+			[x,y] = [0, y + 75] if i % 7 == 0 and i
+			break if i == placementId
+			break if i not in placements
+			# Go random after 28 are placed
+			return @getRandom() if i >= 27
 
 		[x,y] = [x + 232, y + 250]
-		@placements[i] = userids[i]
+		user.placement = i
 		return [x, y]
-
-	getPlacementId: ->
-		for i, uid of @placements
-			return i if room.djIds[uid]
-			return i if not room.users[uid]
-		return parseInt(i)+1
 
 	getRandom: ->
 		j = Math
@@ -278,11 +273,21 @@ class PlaceAvatars
 
 	draw: ->
 		for uid, user of room.users
-			room.updateUser(user)
+			room.refreshRoomUser(user)
+
+	addListener: (user) =>
+		a = window['avatar' + user.avatarid]
+		p = @placeAvatar(user)
+		bs = roomman.blackswan.add_dancer(a, "back", p, true, false)
+		roomman.add_tooltip(bs.div, user)
+		uid = user.userid
+		bs.body().click( -> roomman.callback("profile", uid))
+			.css "cursor", "pointer"
+		roomman.listeners[uid] = bs
 
 
 pa = new PlaceAvatars()
-roomman.getRandFloorLocation = pa.placeAvatar
+roomman.add_listener = pa.addListener
 
 fixUI = ->
 	window.buttonLeft = 494

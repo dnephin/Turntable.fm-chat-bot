@@ -44,3 +44,4 @@ stringInText = (strings, text, forceWord=true) ->
 if (typeof String.prototype.startsWith != 'function')
 	String.prototype.startsWith = (str) ->
 		@search(new RegExp(str, 'i')) == 0
+
