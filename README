@@ -20,7 +20,6 @@ Run Instructions:
 
 
 Possible Additions:
- - fix getVoters, broken when someone leaves the room after voting. (save name on vote?)
  - fix upload button
  - cancel afk response
  - Identify songs that have been played recently, and alert if you have them

@@ -289,6 +289,11 @@ class PlaceAvatars
 pa = new PlaceAvatars()
 roomman.add_listener = pa.addListener
 
+addVoterButton = ->
+	ele = $('<div>?</div>')
+		.click -> eventHandlers.voteMonitor.getVoters()
+	styleButton(ele)
+
 fixUI = ->
 	window.buttonLeft = 494
 	loadFonts()
@@ -303,6 +308,7 @@ fixUI = ->
 	cleanupMeter()
 	addSearch()
 	cleanupScrollbars()
+	addVoterButton()
 	$('#footer').hide()
 
 fixUI()

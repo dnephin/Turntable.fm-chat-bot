@@ -149,15 +149,16 @@ class VoteMonitor extends EventHandler
 		document.title = "+#{data.upvotes} -#{data.downvotes} | tt.fm"
 
 	recordVote: (data) ->
+		u = room.users
+		uid = data[0]
 		if data[1] == 'up'
-			@upvoters.push(data[0])
+			@upvoters.push(u[uid].name)
 		else
-			@downvoters.push(data[0])
+			@downvoters.push(u[uid].name)
 
 	getVoters: () ->
-		u = room.users
-		ups = [u[userid].name for userid in @upvoters]
-		downs = [u[userid].name for userid in @downvoters]
+		ups = [u for u in @upvoters]
+		downs = [u for u in @downvoters]
 		log "Up votes:#{ups.join(',')} - Down Votes:#{downs.join(',')}"
 
 
