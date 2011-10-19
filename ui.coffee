@@ -105,14 +105,15 @@ moveRoomButtons = ->
 
 cleanupChat = ->
 	# Clear space
+	add_height = 69
 	c = $('.queueView .songlist')
 	c.css(top: 0)
-		.height(c.height() + 43)
-	turntable.playlist.setPlaylistHeight(room.chatOffsetTop + 43)
+		.height(c.height() + add_height)
+	turntable.playlist.setPlaylistHeight(room.chatOffsetTop + add_height)
 	# TODO: this doesn't prevent the grey box from showing when the size is changing
 	# Setup callback when changed.
 	$('.chatHeader').bind("mouseup mouseout", (e) ->
-		turntable.playlist.setPlaylistHeight(room.chatOffsetTop + 43)
+		turntable.playlist.setPlaylistHeight(room.chatOffsetTop + add_height)
 	)
 
 	$('.chat-container .input-box').css
