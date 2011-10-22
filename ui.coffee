@@ -277,7 +277,7 @@ class PlaceAvatars
 			room.refreshRoomUser(user)
 
 	addListener: (user) =>
-		a = window['avatar' + user.avatarid]
+		a = roomman.getExistingAvatarById(user.avatarid)
 		p = @placeAvatar(user)
 		bs = roomman.blackswan.add_dancer(a, "back", p, true, false)
 		roomman.add_tooltip(bs.div, user)
