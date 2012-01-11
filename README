@@ -20,6 +20,8 @@ Run Instructions:
 
 
 Possible Additions:
+ - activity rating for the room (average idle time in the room?)
+ - console log messages in the window
  - fix upload button
  - cancel afk response
  - Identify songs that have been played recently, and alert if you have them

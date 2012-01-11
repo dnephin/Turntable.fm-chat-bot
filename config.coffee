@@ -95,7 +95,7 @@ goodArtists = [
 
 badArtists = [
 	'50 cent'
-	'curren$y'
+	'curren\$y'
 	'dmx'
 	'drake'
 	'kendrick'

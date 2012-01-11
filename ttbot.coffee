@@ -69,6 +69,7 @@ class StageJumper extends EventHandler
 		return if e.command != "rem_dj"
 		if tt.user.id == e.user[0].userid
 			log "I just stepped off or got booted."
+			@stop()
 			return
 		if room.isDj()
 			log "I'm already on the decks."

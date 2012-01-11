@@ -295,6 +295,24 @@ addVoterButton = ->
 		.click -> eventHandlers.voteMonitor.getVoters()
 	styleButton(ele)
 
+addBotButton = ->
+	ele = $('<div>b</div>')
+
+	enabled = ->
+		startBot()
+		ele.click ->
+			stopBot()
+		ele.css('background-color': 'green')
+	
+	disable = ->
+		stopBot()
+		ele.click ->
+			startBot()
+		ele.css('background-color': tt-red)
+	
+	ele.click(enabled)
+	styleButton(ele)
+
 fixUI = ->
 	window.buttonLeft = 494
 	loadFonts()
@@ -310,6 +328,7 @@ fixUI = ->
 	addSearch()
 	cleanupScrollbars()
 	addVoterButton()
+	addBotButton()
 	$('#footer').hide()
 
 fixUI()
