@@ -231,8 +231,7 @@ cleanupScrollbars = ->
 			event.preventDefault()
 			newPos = $(@).scrollTop() + delta * - mouseScrollSpeed
 			$(@).scrollTop(newPos)
-		).css
-			overflow: 'hidden'
+		)
 	$('.queue.realPlaylist').css
 			width: '100%'
 

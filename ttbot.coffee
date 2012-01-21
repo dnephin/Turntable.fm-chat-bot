@@ -177,11 +177,13 @@ eventHandlers =
 # Also reset room/rooman references on room change
 
 startBot = () ->
+	log "Starting bot."
 	eventHandlers.autoVoter.start()
 	eventHandlers.stageJumper.start()
 	eventHandlers.autoResponder.start()
 
 stopBot = () ->
+	log "Stopping bot."
 	eventHandlers.autoVoter.stop()
 	eventHandlers.stageJumper.stop()
 	eventHandlers.autoResponder.stop()

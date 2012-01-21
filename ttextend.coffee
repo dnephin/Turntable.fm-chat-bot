@@ -15,9 +15,10 @@ window.roomman = getRoomManager()
 window.lastVisibleAction = util.now()
 
 # Update idle time 
-window.updateIdle = ->
-	turntable.lastMotionTime = util.now()
+turntable.idleTime = -> 1
 
+window.updateIdle = ->
+	turntable.isIdle = false
 
 window.updateLastVisible = ->
 	updateIdle()
