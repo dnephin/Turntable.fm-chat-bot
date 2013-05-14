@@ -1,16 +1,24 @@
 
 Turntable.fm Bot
+================
 
-Objectives:
+This project has not been maintained for a while now.
+
+Objectives
+----------
  - Prevent idle time from going over x seconds
  - Automatically grab a DJ spot when one becomes available
  - Respond to idle checks
  - Greatly improve the UI and finding songs in the playlist
 
-Build:
-  coffee --bare -l --watch --compile *.coffee
+Build
+-----
+```
+coffee --bare -l --watch --compile *.coffee
+```
 
-Run Instructions:
+Run Instructions
+----------------
 	1. Modify config.coffee
 	2. Build the javascript using the command above
 	3. Host the js files somewhere (these instructions assume locally on port 80)
@@ -19,7 +27,8 @@ Run Instructions:
 		$.getScript('main.js')
 
 
-Possible Additions:
+Possible Additions
+------------------
  - activity rating for the room (average idle time in the room?)
  - console log messages in the window
  - fix upload button
